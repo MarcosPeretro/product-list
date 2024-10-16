@@ -1,19 +1,23 @@
-import { StyleSheet, Switch, Text, View, FlatList, } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { ProductItem } from './Components/ProductItem';
-import { ProductList } from './Components/ProductList';
+import { StatusBar, StyleSheet, View } from 'react-native';
 import { FilterBar } from './Components/FilterBar';
+import { ProductList } from './Components/ProductList';
 
 export default function App() {
-  const [selectedCategory, setSelectedCategory] = useState("Eletronicos");
-  
+
+  const [filtros, setFiltros] = useState({
+    Categoria: "",
+    Nome: "",
+    PrecoMinimo: "",
+    PrecoMaximo: "",
+    Estoque: "",
+  })
+
   const itens = [
     {
       Id: 1,
       Nome: "Geladeira eletrolux 3 portas com aguinha",
-      Preço: 98.99,
+      Preco: 98.99,
       Categoria: "Eletronicos",
       Estoque: 10,
       Imagem: "",
@@ -21,7 +25,7 @@ export default function App() {
     {
       Id: 2,
       Nome: "PC gamer i11",
-      Preço: 42000,
+      Preco: 42000,
       Categoria: "Eletronicos",
       Estoque: 1,
       Imagem: "",
@@ -29,7 +33,7 @@ export default function App() {
     {
       Id: 3,
       Nome: "Airfry",
-      Preço: 12.49,
+      Preco: 12.49,
       Categoria: "Eletronicos",
       Estoque: 0,
       Imagem: "",
@@ -37,7 +41,7 @@ export default function App() {
     {
       Id: 82,
       Nome: "Cadeira de balanço",
-      Preço: 149.99,
+      Preco: 149.99,
       Categoria: "Mobilia",
       Estoque: 700,
       Imagem: "",
@@ -45,7 +49,7 @@ export default function App() {
     {
       Id: 999,
       Nome: "Tapete de vo",
-      Preço: 1,
+      Preco: 1,
       Categoria: "Mobilia",
       Estoque: 4000000,
       Imagem: "",
@@ -53,7 +57,7 @@ export default function App() {
     {
       Id: 1000,
       Nome: "Bombona",
-      Preço: 39.99,
+      Preco: 39.99,
       Categoria: "Mobilia",
       Estoque: 22,
       Imagem: "",
@@ -62,7 +66,7 @@ export default function App() {
     {
       Id: 150,
       Nome: "Espada de damasco",
-      Preço: 67.99,
+      Preco: 67.99,
       Categoria: "Forja",
       Estoque: 0,
       Imagem: "",
@@ -70,7 +74,7 @@ export default function App() {
     {
       Id: 200,
       Nome: "Boomerangue",
-      Preço: 32.50,
+      Preco: 32.50,
       Categoria: "Forja",
       Estoque: 299,
       Imagem: "",
@@ -78,7 +82,7 @@ export default function App() {
     {
       Id: 250,
       Nome: "Armadura medieval completa",
-      Preço: 499,
+      Preco: 499,
       Categoria: "Forja",
       Estoque: 4,
       Imagem: "",
@@ -86,37 +90,20 @@ export default function App() {
   ]
   return (
     <View style={styles.container}>
-      <View style={styles.pickerContainer} >
-        <Picker
-          style={styles.picker}
-          selectedValue={selectedCategory}
-          onValueChange={(itemValue) =>
-            setSelectedCategory(itemValue)
-          }>
-          <Picker.Item label="Eletrodomesticos" value="Eletronicos" />
-          <Picker.Item label="Moveis" value="Mobilia" />
-          <Picker.Item label="Forja" value="Forja" />
-        </Picker>
-        
-      </View>
-      <FlatList
-        data={itens}
-        renderItem={({ item }) => <ProductList props={item} />}
-        keyExtractor={(item) => item.Id}
-      />
-     
+      <FilterBar filtros={filtros} setFiltros={setFiltros}/>
+      <ProductList produtos={itens} filtros={filtros}/>
+
     </View>
   );
-  
-  
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
     justifyContent: 'center',
+    padding: 16,
+    paddingTop: StatusBar.currentHeight + 15
   },
   pickerContainer: {
     backgroundColor: '#333',
@@ -126,4 +113,55 @@ const styles = StyleSheet.create({
   picker: {
     color: '#FFF',
   },
+  input: {
+    outline: 'none',
+    fontSize: 16,
+    color: '#333',
+  },
+  containerInput: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap: 8,
+    marginBottom: 16,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    height: 48,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0, height: 2
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    backgroundColor: '#fff'
+  },
+
+  containerPreco: {
+
+    flexDirection: 'collum',
+    alignItems: 'center',
+    columnGap: 8,
+    marginBottom: 16,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingTop: 8,
+    height: 48,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0, height: 2
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    backgroundColor: '#fff'
+  },
+  Estoque: {
+    alignItems: "center",
+    flexDirection: "row",
+    collumGap: 8, 
+  }
 });
